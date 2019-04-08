@@ -10,7 +10,9 @@ import java.util.Stack;
 public class Deck {
     private int deckNo;
     private Stack<Card> cards;
+    // suits array stores all possible suits values
     private char[] suits = {("S").charAt(0), ("H").charAt(0), ("C").charAt(0), ("D").charAt(0)};
+    // picCardValues array stores all possible values of the picture cards.
     private String[] picCardValues = {("J"), ("Q"), ("K"), ("A")};
     //private x cards; use array of cards
     
@@ -41,10 +43,12 @@ public class Deck {
     } */
     
     // methods
+    // pops cards out of deck while building shoe.
     public Card shoe(){
     	return cards.pop();
     }
     
+    // implements Collection shuffle on cards stack
     public void shuffle(){
     	Collections.shuffle(cards);
     }

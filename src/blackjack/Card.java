@@ -10,15 +10,17 @@ package blackjack;
  * @author Rory
  */
 public class Card {
-    private int priority;  // Shows suit and card priority
-    private int value;
-    private char suit;
-    private String title;
+    private int priority;  // Shows suit and card priority values range between 0-19. Simply quantify any card's priority.
+    private int value;  // value of the card, values range from 1-11
+    private char suit;  // suit of the card: e.g. C, S, H, D
+    private String title;  // Shows title of the card: E.g. 10, A, Q, 9 etc.
     
+    // start of constructor method for number cards (pass integer and character)
     public Card(int titleInput, char suitInput) {
     	title = Integer.toString(titleInput);
     	value = titleInput;
     	suit = suitInput;
+    	// determines priority from suit input
     	switch(Character.toString(suitInput)) {
     	case "S": priority = 3; break;
     	case "H": priority = 2; break;
@@ -27,9 +29,12 @@ public class Card {
     	default: System.err.println("Error in Suit determination: Card Class");
     	}
     }
+    
+    // start of constructor method for picture cards (pass String and character)
     public Card(String titleInput, char suitInput) {
     	title = titleInput;
     	suit = suitInput;
+    	// determines priority from suit input
     	switch(Character.toString(suitInput)) {
     	case "S": priority = 3; break;
     	case "H": priority = 2; break;
@@ -37,6 +42,7 @@ public class Card {
     	case "D": priority = 0; break;
     	default: System.err.println("Error in Suit determination: Card Class"); break;
     	}
+    	// determines priority from picture type, adds value on to suit priority value
     	switch(titleInput) {
     	case "J": priority = priority + 4; value = 10; break;
     	case "Q": priority = priority + 8; value = 10; break;
