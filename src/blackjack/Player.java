@@ -9,19 +9,26 @@ package blackjack;
  *
  * @author Rory
  */
-public class dealer {
-    //private x hand; (what data structure to use? array of cards?)
-    private int cash;
-    private int sum;
+public class Player {
     
-    //todo: setter methods, logic for hit and stick, hand
+    private int sum;
+    private int cash;
+    //private x hand; (what data structure to use? array of cards?)
+    //private x profile; (what data structure to use? array of strings or booleans?)
+    private boolean stickFlag;
+    
     
     // getters
     public int getCash(){
         return cash;
     }
+    
     public int getSum(){
         return sum;
+    }
+    
+    public boolean getStick(){
+        return stickFlag;
     }
     
     // setters
@@ -33,10 +40,20 @@ public class dealer {
         this.sum = newSum;
     }
     
+    public void setStick(boolean newStick){
+        this.stickFlag = newStick;
+    }
+    
     // methods
+    public void makeBet(){
+    
+    }
+    
     public void hit(){
+        
     }
     
     public void stick(){
+    
     }
 }

@@ -9,7 +9,7 @@ package blackjack;
  *
  * @author Rory
  */
-public class game {
+public class Game {
     private int noOfDecks;
     private int noOfPlayers;
     private boolean togglePeek;
