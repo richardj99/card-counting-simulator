@@ -28,6 +28,8 @@ public class Deck {
     			cards.add(new Card(s, c));
     		}
     	}
+    	this.shuffle();
+    	
     }// end of constructor method
     
     
