@@ -10,7 +10,6 @@ package blackjack;
  * @author Rory
  */
 public class Dealer {
-    private int cash; // is this necessary if the dealer is implied to have an unlimited float?
     private int sum;
     private Card[] hand;
     private boolean stickFlag;
@@ -22,9 +21,6 @@ public class Dealer {
     //todo: setter methods, logic for hit and stick, hand
     
     // getters
-    public int getCash(){
-        return cash;
-    }
     public int getSum(){
         return sum;
     }
@@ -34,9 +30,6 @@ public class Dealer {
     }
     
     // setters
-    public void setCash(int newCash){
-        this.cash = newCash;
-    }
     
     public void setSum(int newSum){
         this.sum = newSum;
@@ -56,7 +49,7 @@ public class Dealer {
     
     // methods
     
-    public void checkHitFloor(){
+    public void dealerTurn(){
         if(sum > 14){
             stick();
         }else{
@@ -66,9 +59,6 @@ public class Dealer {
     
     public void hit(){
         setStick(false);
-        // Todo: draw from deck and add to hand
-        
-        updateSum();
     }
     
     public void stick(){

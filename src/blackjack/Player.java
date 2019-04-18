@@ -73,9 +73,6 @@ public class Player {
     
     public void hit(){
         setStick(false);
-        // Todo: draw from deck and add to hand
-        
-        updateSum();
     }
     
     public void stick(){
