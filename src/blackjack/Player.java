@@ -13,12 +13,23 @@ public class Player {
     
     private int sum;
     private int cash;
-    //private x hand; (what data structure to use? array of cards?)
+    private Card[] hand; //(what data structure to use? array of cards?)
     //private x profile; (what data structure to use? array of strings or booleans?)
+    private int currentBet;
     private boolean stickFlag;
     
+    // constructor method
+    public Player(int startingCash){
+        sum = 0;
+        currentBet = 0;
+        cash = startingCash;
+    }
     
     // getters
+    public Card[] getHand(){
+        return hand;
+    }
+    
     public int getCash(){
         return cash;
     }
@@ -32,6 +43,8 @@ public class Player {
     }
     
     // setters
+    
+    
     public void setCash(int newCash){
         this.cash = newCash;
     }
@@ -40,20 +53,29 @@ public class Player {
         this.sum = newSum;
     }
     
+    public void updateSum(){
+        int tempSum = 0;
+        for(int i=0; i<hand.length; i++){
+            tempSum = tempSum + hand[i].getValue();
+        }
+        setSum(tempSum);
+    }
+    
     public void setStick(boolean newStick){
         this.stickFlag = newStick;
     }
     
     // methods
-    public void makeBet(){
-    
+    public void makeBet(int betAmount){
+        cash = cash - betAmount;
+        currentBet = betAmount;
     }
     
     public void hit(){
-        
+        setStick(false);
     }
     
     public void stick(){
-    
+        setStick(true);
     }
 }
