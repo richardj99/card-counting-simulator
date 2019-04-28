@@ -56,6 +56,7 @@ public class Dealer {
     // methods
     
     public int pushCard(Card newCard) {
+    	int index = 0;
     	if(noOfCards<5) {
     		sum = sum + newCard.getValue();
     		System.out.println("New Sum " + sum);
@@ -64,11 +65,12 @@ public class Dealer {
     				System.out.println("Adding card to index " + i);
     				hand[i] = newCard;
     				noOfCards++;
+    				index = i;
     				break;
     			}
     		}
-    		return 1;
-    	} else return 0;
+    		return index;
+    	} else return -1;
     }
     
     public boolean hitStickDecide() {

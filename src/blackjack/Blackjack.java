@@ -2,11 +2,14 @@ package blackjack;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import java.io.*;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 /**
  *
  * @author Rory
@@ -189,37 +192,37 @@ public class Blackjack extends JFrame{
         
         // player card locations;
         dealerPanel = new JPanel();
-        dealerPanel.setBorder(new TitledBorder(new EtchedBorder(), "Dealer"));
+        dealerPanel.setBorder(new TitledBorder(new EmptyBorder(3, 3, 3, 3), "Dealer"));
         dealerPanel.setBackground(tablePlayArea.getBackground());
         dealerPanel.setPreferredSize(new Dimension(TABLE_INITIAL_WIDTH-20, 150));
-        tablePlayArea.add(dealerPanel);
+        tablePlayArea.add(dealerPanel, BorderLayout.PAGE_START);
         
         playerOnePanel = new JPanel();
-        playerOnePanel.setBorder(new TitledBorder(new EtchedBorder(), "Player 1 (You)"));
+        playerOnePanel.setBorder(new TitledBorder(new EmptyBorder(3, 3, 3, 3), "Player 1 (You)"));
         playerOnePanel.setBackground(tablePlayArea.getBackground());
         playerOnePanel.setPreferredSize(new Dimension(TABLE_INITIAL_WIDTH-20, 150));
         tablePlayArea.add(playerOnePanel);
         
         playerTwoPanel = new JPanel();
-        playerTwoPanel.setBorder(new TitledBorder(new EtchedBorder(), "Player 2"));
+        playerTwoPanel.setBorder(new TitledBorder(new EmptyBorder(3, 3, 3, 3), "Player 2"));
         playerTwoPanel.setBackground(tablePlayArea.getBackground());
         playerTwoPanel.setPreferredSize(new Dimension((TABLE_INITIAL_WIDTH-50)/2, 150));
         tablePlayArea.add(playerTwoPanel);
         
         playerThreePanel = new JPanel();
-        playerThreePanel.setBorder(new TitledBorder(new EtchedBorder(), "Player 3"));
+        playerThreePanel.setBorder(new TitledBorder(new EmptyBorder(3, 3, 3, 3), "Player 3"));
         playerThreePanel.setBackground(tablePlayArea.getBackground());
         playerThreePanel.setPreferredSize(new Dimension((TABLE_INITIAL_WIDTH-50)/2, 150));
         tablePlayArea.add(playerThreePanel);
         
         playerFourPanel = new JPanel();
-        playerFourPanel.setBorder(new TitledBorder(new EtchedBorder(), "Player 4"));
+        playerFourPanel.setBorder(new TitledBorder(new EmptyBorder(3, 3, 3, 3), "Player 4"));
         playerFourPanel.setBackground(tablePlayArea.getBackground());
         playerFourPanel.setPreferredSize(new Dimension((TABLE_INITIAL_WIDTH-50)/2, 150));
         tablePlayArea.add(playerFourPanel);
         
         playerFivePanel = new JPanel();
-        playerFivePanel.setBorder(new TitledBorder(new EtchedBorder(), "Player 5"));
+        playerFivePanel.setBorder(new TitledBorder(new EmptyBorder(3, 3, 3, 3), "Player 5"));
         playerFivePanel.setBackground(tablePlayArea.getBackground());
         playerFivePanel.setPreferredSize(new Dimension((TABLE_INITIAL_WIDTH-50)/2, 150));
         tablePlayArea.add(playerFivePanel);
@@ -232,12 +235,40 @@ public class Blackjack extends JFrame{
         playerFourCards = new ArrayList<JPanel>();
         playerFiveCards = new ArrayList<JPanel>();
         for(int i=0; i<5; i++) {
-        	JPanel panel = new JPanel();
-        	panel.setPreferredSize(new Dimension((dealerPanel.getWidth()-10)/5, dealerPanel.getHeight()));
-        	panel.setBackground(tablePlayArea.getBackground());
-        	panel.setBorder(new TitledBorder(new EtchedBorder(), "Card 1"));
-        	dealerCards.add(panel);
-        	dealerPanel.add(panel);
+        	dealerCards.add(new JPanel());
+        	dealerCards.get(i).setPreferredSize(new Dimension(89, 130));
+        	dealerCards.get(i).setBackground(tablePlayArea.getBackground());
+        	//dealerCards.get(i).setBorder(new TitledBorder(new EtchedBorder(), "Card 1"));
+        	dealerPanel.add(dealerCards.get(i));
+        	
+        	playerOneCards.add(new JPanel());
+        	playerOneCards.get(i).setPreferredSize(new Dimension(89, 130));
+        	playerOneCards.get(i).setBackground(tablePlayArea.getBackground());
+        	playerOnePanel.add(playerOneCards.get(i));
+        
+        	playerTwoCards.add(new JPanel());
+        	playerTwoCards.get(i).setPreferredSize(new Dimension(79, 130));
+        	playerTwoCards.get(i).setBackground(tablePlayArea.getBackground());
+        	//playerTwoCards.get(i).setBorder(new TitledBorder(new EtchedBorder(), "Card 1"));
+        	playerTwoPanel.add(playerTwoCards.get(i));
+        
+        	playerThreeCards.add(new JPanel());
+        	playerThreeCards.get(i).setPreferredSize(new Dimension(79, 130));
+        	playerThreeCards.get(i).setBackground(tablePlayArea.getBackground());
+        	//playerThreeCards.get(i).setBorder(new TitledBorder(new EtchedBorder(), "Card 1"));
+        	playerThreePanel.add(playerThreeCards.get(i));
+        
+        	playerFourCards.add(new JPanel());
+        	playerFourCards.get(i).setPreferredSize(new Dimension(79, 130));
+        	playerFourCards.get(i).setBackground(tablePlayArea.getBackground());
+        	//playerFourCards.get(i).setBorder(new TitledBorder(new EtchedBorder(), "Card 1"));
+        	playerFourPanel.add(playerFourCards.get(i));
+        
+        	playerFiveCards.add(new JPanel());
+        	playerFiveCards.get(i).setPreferredSize(new Dimension(79, 130));
+        	playerFiveCards.get(i).setBackground(tablePlayArea.getBackground());
+        	//playerFiveCards.get(i).setBorder(new TitledBorder(new EtchedBorder(), "Card 1"));
+        	playerFivePanel.add(playerFiveCards.get(i));
         }
         
         // Message area
@@ -289,6 +320,130 @@ public class Blackjack extends JFrame{
     }
     
     // methods
+    
+    public void clearTable() {
+    	for(int i=0; i<5; i++) {
+    		playerOneCards.get(i).removeAll();
+    		playerOneCards.get(i).revalidate();
+    		playerOneCards.get(i).repaint();
+    		playerTwoCards.get(i).removeAll();
+    		playerTwoCards.get(i).revalidate();
+    		playerTwoCards.get(i).repaint();
+    		playerThreeCards.get(i).removeAll();
+    		playerThreeCards.get(i).revalidate();
+    		playerThreeCards.get(i).repaint();
+    		playerFourCards.get(i).removeAll();
+    		playerFourCards.get(i).revalidate();
+    		playerFourCards.get(i).repaint();
+    		playerFiveCards.get(i).removeAll();
+    		playerFiveCards.get(i).revalidate();
+    		playerFiveCards.get(i).repaint();
+    		dealerCards.get(i).removeAll();
+    		dealerCards.get(i).revalidate();
+    		dealerCards.get(i).repaint();
+    	}
+    }
+    
+    public boolean addCard(char suit, String title, int userNumber, int cardLocation) {
+    	Image image;
+    	try {
+    		image = ImageIO.read(new File("./Cards/"+ suit + title + ".png"));
+    	} catch(IOException e){
+    		e.printStackTrace();
+    		return false;	
+    	}
+    	image = image.getScaledInstance(79, 120, Image.SCALE_DEFAULT);
+    	JLabel imageLabel = new JLabel(new ImageIcon(image));
+    	switch(userNumber) {
+    	case 0:
+    		playerOneCards.get(cardLocation).removeAll();
+    		playerOneCards.get(cardLocation).add(imageLabel);
+    		playerOneCards.get(cardLocation).revalidate();
+    		playerOneCards.get(cardLocation).repaint();
+    		break;
+    	case 1:
+    		playerTwoCards.get(cardLocation).removeAll();
+    		playerTwoCards.get(cardLocation).add(imageLabel);
+    		playerTwoCards.get(cardLocation).revalidate();
+    		playerTwoCards.get(cardLocation).repaint();
+    		break;
+    	case 2:
+    		playerThreeCards.get(cardLocation).removeAll();
+    		playerThreeCards.get(cardLocation).add(imageLabel);
+    		playerThreeCards.get(cardLocation).revalidate();
+    		playerThreeCards.get(cardLocation).repaint();
+    		break;
+    	case 3:
+    		playerFourCards.get(cardLocation).removeAll();
+    		playerFourCards.get(cardLocation).add(imageLabel);
+    		playerFourCards.get(cardLocation).revalidate();
+    		playerFourCards.get(cardLocation).repaint();
+    		break;
+    	case 4:
+    		playerFiveCards.get(cardLocation).removeAll();
+    		playerFiveCards.get(cardLocation).add(imageLabel);
+    		playerFiveCards.get(cardLocation).revalidate();
+    		playerFiveCards.get(cardLocation).repaint();
+    		break;
+    	default:
+    		dealerCards.get(cardLocation).removeAll();
+    		dealerCards.get(cardLocation).add(imageLabel);
+    		dealerCards.get(cardLocation).revalidate();
+    		dealerCards.get(cardLocation).repaint();
+    	}
+    	return true;
+    }
+    
+    public boolean addCard(int userNumber, int cardLocation){
+    	Image image;
+    	try {
+    		image = ImageIO.read(new File("./Cards/CB.jpg"));
+    	} catch(IOException e){
+    		e.printStackTrace();
+    		return false;	
+    	}
+    	image = image.getScaledInstance(79, 120, Image.SCALE_DEFAULT);
+    	JLabel imageLabel = new JLabel(new ImageIcon(image));
+    	switch(userNumber) {
+    	case 0: 
+    		playerOneCards.get(cardLocation).removeAll();
+    		playerOneCards.get(cardLocation).add(imageLabel);
+    		playerOneCards.get(cardLocation).revalidate();
+    		playerOneCards.get(cardLocation).repaint();
+    		break;
+    	case 1:
+    		playerTwoCards.get(cardLocation).removeAll();
+    		playerTwoCards.get(cardLocation).add(imageLabel);
+    		playerTwoCards.get(cardLocation).revalidate();
+    		playerTwoCards.get(cardLocation).repaint();
+    		break;
+    	case 2:
+    		playerThreeCards.get(cardLocation).removeAll();
+    		playerThreeCards.get(cardLocation).add(imageLabel);
+    		playerThreeCards.get(cardLocation).revalidate();
+    		playerThreeCards.get(cardLocation).repaint();
+    		break;
+    	case 3:
+    		playerFourCards.get(cardLocation).removeAll();
+    		playerFourCards.get(cardLocation).add(imageLabel);
+    		playerFourCards.get(cardLocation).revalidate();
+    		playerFourCards.get(cardLocation).repaint();
+    		break;
+    	case 4:
+    		playerFiveCards.get(cardLocation).removeAll();
+    		playerFiveCards.get(cardLocation).add(imageLabel);
+    		playerFiveCards.get(cardLocation).revalidate();
+    		playerFiveCards.get(cardLocation).repaint();
+    		break;
+    	default:
+    		dealerCards.get(cardLocation).removeAll();
+    		dealerCards.get(cardLocation).add(imageLabel);
+    		dealerCards.get(cardLocation).revalidate();
+    		dealerCards.get(cardLocation).repaint();
+    		break;
+    	}
+    	return true;
+    }
     
     public void writeToConsole(String input) {
     	messageArea.append(input);

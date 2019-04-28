@@ -86,6 +86,7 @@ public class Game{
     		}
     		dealer.emptyHand();
     	}
+    	this.endGame();
     }
     
     // getters
@@ -112,23 +113,50 @@ public class Game{
     // methods
     
     public void runIncrement(){
-    	dealer.pushCard(shoe.pop());
-    	dealer.pushCard(shoe.pop());
-    	
-    	for(Player p: players) {
-    		p.pushCard(shoe.pop());
-			p.pushCard(shoe.pop());
+    	Card c = shoe.pop();
+		int index = dealer.pushCard(c);
+		uiInstance.addCard(c.getSuit(), c.getTitle(), -1, index);
+		c = null;
+		c = shoe.pop();
+		index = dealer.pushCard(c);
+    	if(togglePeek) {
+    		uiInstance.addCard(c.getSuit(), c.getTitle(), -1, index);
+    		dealer.pushCard(shoe.pop());
+    	}
+    	else {
+    		uiInstance.addCard(-1, index);
     	}
     	
+    	c = shoe.pop();
+    	index = players[0].pushCard(c);
+    	uiInstance.addCard(c.getSuit(), c.getTitle(), 0, index);
+    	c = shoe.pop();
+    	index = players[0].pushCard(c);
+    	uiInstance.addCard(c.getSuit(), c.getTitle(), 0, index);
+    	for(int i=1; i<players.length; i++) {
+    		c = shoe.pop();
+    		index = players[i].pushCard(c);
+    		if(togglePeek) {
+    			uiInstance.addCard(c.getSuit(), c.getTitle(), i, index);
+    		} else {
+    			uiInstance.addCard(i, index);
+    		}
+    		c = shoe.pop();
+			index = players[i].pushCard(shoe.pop());
+			if(togglePeek) {
+				uiInstance.addCard(c.getSuit(), c.getTitle(), i, index);
+			}else {
+				uiInstance.addCard(i, index);
+			}
+    	}
 		Card [] userHand = players[0].getHand();
-		
 		userHand = players[0].getHand();
-		for(Card c: userHand) {
-			if(c == null) {
+		for(Card card: userHand) {
+			if(card == null) {
 				continue;
 			}
 			else {
-				this.writeToConsole(c.getTitle() + c.getSuit() + " ");
+				this.writeToConsole(card.getTitle() + card.getSuit() + " ");
 			}
 		}
 		uiInstance.writeToConsole("\n");
@@ -170,13 +198,19 @@ public class Game{
     		while(stickFlag == false) {
     			boolean decision = players[i].hitStickDecide();
     			if(decision == false) {
-    				int success = players[i].pushCard(shoe.pop());
-    				switch(success){
-    				case 0:
+    				c = shoe.pop();
+    				index = players[i].pushCard(c);
+    				if(togglePeek) {
+    					uiInstance.addCard(c.getSuit(), c.getTitle(), i, index);
+    				} else {
+    					uiInstance.addCard(i, index);
+    				}
+    				switch(index){
+    				case -1:
     					this.writeToConsole("Player " + (i+1) + " cannot hit, Forced to stick\n");
     					stickFlag = true;
     					break;
-    				case 1:
+    				default:
     					this.writeToConsole("Player " + (i+1) + " Chose to hit\n");
     					break;
     				}	
@@ -206,22 +240,24 @@ public class Game{
     			}
     		}
     		if(uiInstance.getHitFlag()) {
-	    		int success = players[0].pushCard(shoe.pop());
-	    		switch(success) {
-	    		case 0:
+	    		c = shoe.pop();
+    			index = players[0].pushCard(c);
+	    		uiInstance.addCard(c.getSuit(), c.getTitle(), 0, index);
+	    		switch(index) {
+	    		case -1:
 	    			this.writeToConsole("You already have 5 cards, you're forced to stick \n");
 	    			uiInstance.setStickFlag(true);
 	    			break;
-	    		case 1:
+	    		default:
 	    			this.writeToConsole("You chose to hit\n");
 	    			this.writeToConsole("Your Hand: ");
 	    			userHand = players[0].getHand();
-	    			for(Card c: userHand) {
-	    				if(c == null) {
+	    			for(Card card: userHand) {
+	    				if(card == null) {
 	    					continue;
 	    				}
 	    				else {
-	    					uiInstance.writeToConsole(c.getTitle() + c.getSuit() + " ");
+	    					uiInstance.writeToConsole(card.getTitle() + card.getSuit() + " ");
 	    				}
 	    			}
 	    			uiInstance.writeToConsole("\n");
@@ -241,8 +277,14 @@ public class Game{
     	while(stickFlag == false) {
     		boolean stickDecision = dealer.hitStickDecide();
     		if(stickDecision == false) {
-    			int cardPushSuccess = dealer.pushCard(shoe.pop());
-    			if(cardPushSuccess == 0) {
+    			c = shoe.pop();
+    			index = dealer.pushCard(shoe.pop());
+    			if(togglePeek) {
+    				uiInstance.addCard(c.getSuit(), c.getTitle(), -1, index);
+    			}else {
+    				uiInstance.addCard(-1, index);
+    			}
+    			if(index == 0) {
     				this.writeToConsole("Dealer has the maximum of five cards, Forced to stick\n");
     				stickFlag = true;
     			} else{
@@ -261,17 +303,17 @@ public class Game{
     		}
     		Card[] playerHand = players[i].getHand();
     		this.writeToConsole("Player " + (i+1) + "'s Hand: ");
-    		for(Card c: playerHand) {
-    			if(c == null){
+    		for(Card card: playerHand) {
+    			if(card == null){
     				continue;
     			}
-    			this.writeToConsole(c.getTitle() + c.getSuit() + " ");
+    			this.writeToConsole(card.getTitle() + card.getSuit() + " ");
     			if(toggleCount) {
     				System.out.println("Count Activated");
-					if(c.getValue() >= 10) {
+					if(card.getValue() >= 10) {
 						count--;
 					}
-					if(c.getValue() <= 6) {
+					if(card.getValue() <= 6) {
 						count++;
 					}
 				}
@@ -285,80 +327,80 @@ public class Game{
     		else if(players[i].getSum() == dealer.getSum()) {
     			Card userBest = null;
     			Card dealerBest = null;
-    			for(Card c: players[i].getHand()) {
-    				if(c == null) {
+    			for(Card card: players[i].getHand()) {
+    				if(card == null) {
     					continue;
     				}
     				if((userBest == null)) {
-    					userBest = c;
+    					userBest = card;
     				}
-    				else if(userBest.getPriority() < c.getPriority()) {
+    				else if(userBest.getPriority() < card.getPriority()) {
     					
     				}
     			}
-    			for(Card c: dealer.getHand()) {
-    				if(c == null) {
+    			for(Card card: dealer.getHand()) {
+    				if(card == null) {
     					continue;
     				}
     				if((dealerBest == null)) {
-    					dealerBest = c;
+    					dealerBest = card;
     				}
-    				else if(dealerBest.getPriority() < c.getPriority()) {
-    					dealerBest = c;
+    				else if(dealerBest.getPriority() < card.getPriority()) {
+    					dealerBest = card;
     				}
     			}
     			if(userBest.getPriority() > dealerBest.getPriority()) {
-    				this.writeToConsole("You beat the stalemate with the " + userBest.getTitle() + userBest.getSuit() + "\n");
+    				this.writeToConsole("Player " + (i+1) +" beat the stalemate with the " + userBest.getTitle() + userBest.getSuit() + "\n");
     			} else if (userBest.getPriority() < dealerBest.getPriority()) {
-    				this.writeToConsole("The dealer beat your card in the stalemate with the " + dealerBest.getTitle() + dealerBest.getSuit() + "\n");
+    				this.writeToConsole("The dealer beat Player " + (i+1) + "'s card in the stalemate with the " + dealerBest.getTitle() + dealerBest.getSuit() + "\n");
     			} else {
-    				this.writeToConsole("Absolute Stalemate between you and the dealer, dealer wins by default");
+    				this.writeToConsole("Absolute Stalemate between Player" + (i+1) + "and the dealer, dealer wins by default");
     			}
     		}
-    		else if(players[i].getSum() < dealer.getSum()) {
+    		else if(players[i].getSum() < dealer.getSum() && dealer.getSum() <= 21) {
     			this.writeToConsole("The Dealer beat Player " + (i+1) + " with a score of " + dealer.getSum() + " against a score of " + players[i].getSum() + "\n");
     		}
-    		else if(players[i].getSum() > dealer.getSum()) {
+    		else if(players[i].getSum() > dealer.getSum() | dealer.getSum() > 21) {
     			this.writeToConsole("Player " + (i+1) + " beat the Dealer with a score of " + players[i].getSum() + " against a score of " + dealer.getSum() + "\n");
     			players[i].payPlayer(players[i].getCurrentBet()*2);
     		}
     	}
     	
     	this.writeToConsole("Dealer's Final Hand: ");
-		for(Card c: dealer.getHand()) {
-			if(c == null){
+		for(Card card: dealer.getHand()) {
+			if(card == null){
 				continue;
 			}
 			if(toggleCount) {
 				System.out.println("Count Activated");
-				if(c.getValue() >= 10) {
+				if(card.getValue() >= 10) {
 					count--;
 				}
-				if(c.getValue() <= 6) {
+				if(card.getValue() <= 6) {
 					count++;
 				}
 			}
-			this.writeToConsole(c.getTitle() + c.getSuit() + " ");
+			this.writeToConsole(card.getTitle() + card.getSuit() + " ");
 		}
 		this.writeToConsole("\n");
 		uiInstance.updateCardCount(count);
     	
     	userHand = players[0].getHand();
     	this.writeToConsole("Your Final Hand: ");
-		for(Card c: userHand) {
-			if(c == null){
+		for(Card card: userHand) {
+			if(card == null){
 				continue;
 			}
 			if(toggleCount) {
 				System.out.println("Count Activated");
-				if(c.getValue() >= 10) {
+				if(card.getValue() >= 10) {
 					count--;
 				}
-				if(c.getValue() <= 6) {
+				if(card.getValue() <= 6) {
 					count++;
 				}
 			}
-			this.writeToConsole(c.getTitle() + c.getSuit() + " ");
+			this.writeToConsole(card.getTitle() + card.getSuit() + " ");
 		}
 		this.writeToConsole("\n");
 		uiInstance.updateCardCount(count);
@@ -368,40 +410,41 @@ public class Game{
 		else if(players[0].getSum() == dealer.getSum()) {
 			Card userBest = null;
 			Card dealerBest = null;
-			for(Card c: userHand) {
-				if(c == null) {
+			for(Card card: userHand) {
+				if(card == null) {
 					continue;
 				}
 				if((userBest == null)) {
-					userBest = c;
+					userBest = card;
 				}
-				else if(userBest.getPriority() < c.getPriority()) {
-					userBest = c;
+				else if(userBest.getPriority() < card.getPriority()) {
+					userBest = card;
 				}
 			}
-			for(Card c: dealer.getHand()) {
-				if(c == null) {
+			for(Card card: dealer.getHand()) {
+				if(card == null) {
 					continue;
 				}
 				if((dealerBest == null)) {
-					dealerBest = c;
+					dealerBest = card;
 				}
-				else if(dealerBest.getPriority() < c.getPriority()) {
-					dealerBest = c;
+				else if(dealerBest.getPriority() < card.getPriority()) {
+					dealerBest = card;
 				}
 			}
 			if(userBest.getPriority() > dealerBest.getPriority()) {
 				this.writeToConsole("You beat the stalemate with the " + userBest.getTitle() + userBest.getSuit() + "\n");
+				players[0].payPlayer(players[0].getCurrentBet());
 			} else if (userBest.getPriority() < dealerBest.getPriority()) {
 				this.writeToConsole("The dealer beat your card in the stalemate with the " + dealerBest.getTitle() + dealerBest.getSuit() + "\n");
 			} else {
 				this.writeToConsole("Absolute Stalemate between you and the dealer, dealer wins by default");
 			}
 		}
-		else if(players[0].getSum() < dealer.getSum()) {
+		else if(players[0].getSum() < dealer.getSum() && dealer.getSum() <= 21) {
 			this.writeToConsole("The Dealer beat you with a score of " + dealer.getSum() + " against a score of " + players[0].getSum() + "\n");
 		}
-		else if(players[0].getSum() > dealer.getSum()) {
+		else if(players[0].getSum() > dealer.getSum() | dealer.getSum() > 21) {
 			this.writeToConsole("You beat the Dealer with a score of " + players[0].getSum() + " against a score of " + dealer.getSum() + "\n");
 			players[0].payPlayer(players[0].getCurrentBet()*2);
 		}
@@ -414,6 +457,12 @@ public class Game{
     			noOfPlayers--;
     		}
     	}
+    	try{
+    		Thread.sleep(10000);
+    	} catch(InterruptedException e) {
+    		;
+    	}
+    	uiInstance.clearTable();
     }
     
     public void createGame(){
@@ -425,6 +474,9 @@ public class Game{
     }
     
     public void endGame(){
+    	this.writeToConsole("Game finished");
+    	this.saveLog();
+    	uiInstance.clearTable();
 
     }
     
