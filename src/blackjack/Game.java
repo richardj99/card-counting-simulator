@@ -5,6 +5,11 @@
  */
 package blackjack;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Stack;
 
 public class Game{
@@ -19,7 +24,6 @@ public class Game{
     // start values?
     // player bets?
     private Stack<Card> shoe;
-    private int increment;	// stores what increment the blackjack game is on.
     private Blackjack uiInstance;
     
     //constructor method
@@ -63,11 +67,9 @@ public class Game{
     	}
     	
     	//start to run game
-    	increment = 0;
     	boolean playerAliveFlag = true;
     	while(shoe.size() >= noOfPlayers*5 && (players[0] != null && (playerAliveFlag = true))) {
     		this.runIncrement();
-    		increment++;
     		// check for players with money
     		playerAliveFlag = false;
     		for(int i=1; i<players.length; i++) {
@@ -457,6 +459,7 @@ public class Game{
     			noOfPlayers--;
     		}
     	}
+    	this.saveLog();
     	try{
     		Thread.sleep(10000);
     	} catch(InterruptedException e) {
@@ -465,12 +468,21 @@ public class Game{
     	uiInstance.clearTable();
     }
     
-    public void createGame(){
-        
-    }
-    
     public void saveLog(){
-    
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+		LocalDateTime now = LocalDateTime.now();
+		//System.out.println(dtf.format(now)); //2016/11/16 12:08:43
+		File newFile = new File(dtf.format(now));
+		try{
+			PrintWriter writer = new PrintWriter(dtf.format(now)+".txt", "UTF-8");
+			writer.print(uiInstance.outputConsole());
+			writer.close();
+			this.writeToConsole("File Saved Successfully\n");
+		} catch(IOException e) {
+			e.printStackTrace();
+			this.writeToConsole("Issue saving to file\n");
+		}
+		
     }
     
     public void endGame(){

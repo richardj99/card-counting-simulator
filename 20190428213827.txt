@@ -1,0 +1,21 @@
+5C QH 
+Betting Phase: 
+Player 2 has made a bet of 19!
+Please make a bet
+You made a bet of 5
+Game Phase:
+Player 2 Chose to hit
+Player 2 Chose to stick
+Current Hand: 5C QH
+Please Hit or Stick
+You chose to hit
+Your Hand: 5C QH 8D 
+Players sum is over 21, player went bust
+You stuck with a total score of: 23
+Dealer's Turn
+Dealer chose to stick
+Player 2's Hand: 3S 4D 8S 
+The Dealer beat Player 2 with a score of 17 against a score of 15
+Dealer's Final Hand: 9H 8H 
+Your Final Hand: 5C QH 8D 
+You went bust

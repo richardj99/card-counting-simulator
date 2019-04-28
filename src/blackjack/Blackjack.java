@@ -459,6 +459,10 @@ public class Blackjack extends JFrame{
     	countLabel.setText(Integer.toString(count));
     }
     
+    public String outputConsole() {
+    	return messageArea.getText();
+    }
+    
     class newGameActionListener implements ActionListener{
 
 		@Override
