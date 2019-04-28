@@ -2,18 +2,12 @@ package blackjack;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.*;
 import java.io.*;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
-/**
- *
- * @author Rory
- */
+
 public class Blackjack extends JFrame{
 	private static Blackjack blackjackInstance;
 
@@ -21,9 +15,7 @@ public class Blackjack extends JFrame{
     private final int TABLE_INITIAL_HEIGHT = 700;
     private final int CONTROL_PANEL_WIDTH = 200;
     private final int MESSAGE_AREA_HEIGHT = 100;
-    private Game gameInstance;
     private boolean hitButtonFlag, betButtonFlag, stickButtonFlag;
-    private Thread gameThread;
     
     class tableArea extends JPanel
     {
@@ -153,6 +145,7 @@ public class Blackjack extends JFrame{
         clearButton = new JButton("Clear Table");
           clearButton.setPreferredSize(new Dimension(CONTROL_PANEL_WIDTH - 20, 50));
         controlPanel.add(clearButton);
+        clearButton.addActionListener(new clearTableActionListener());
         
         // Hit Button
         hitButton = new JButton("Hit");
@@ -463,6 +456,16 @@ public class Blackjack extends JFrame{
     	return messageArea.getText();
     }
     
+    
+    class clearTableActionListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			clearTable();		
+		}
+    	
+    }
+    
     class newGameActionListener implements ActionListener{
 
 		@Override
@@ -478,7 +481,7 @@ public class Blackjack extends JFrame{
 				countPanel.setVisible(count);
 				new Thread() {
 					public void run() {
-						gameInstance = new Game(startingMoney, playerNumber, deckNumber, peek, count, blackjackInstance);
+						Game gameInstance = new Game(startingMoney, playerNumber, deckNumber, peek, count, blackjackInstance);
 					}
 				}.start();
 			//}catch(Exception exc){

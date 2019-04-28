@@ -5,7 +5,6 @@
  */
 package blackjack;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
@@ -471,8 +470,6 @@ public class Game{
     public void saveLog(){
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 		LocalDateTime now = LocalDateTime.now();
-		//System.out.println(dtf.format(now)); //2016/11/16 12:08:43
-		File newFile = new File(dtf.format(now));
 		try{
 			PrintWriter writer = new PrintWriter(dtf.format(now)+".txt", "UTF-8");
 			writer.print(uiInstance.outputConsole());
