@@ -5,10 +5,7 @@
  */
 package blackjack;
 
-/**
- *
- * @author Rory
- */
+
 public class Card {
     private int priority;  // Shows suit and card priority values range between 0-19. Simply quantify any card's priority.
     private int value;  // value of the card, values range from 1-11

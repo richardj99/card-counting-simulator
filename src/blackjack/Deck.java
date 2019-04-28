@@ -21,7 +21,7 @@ public class Deck {
     	deckNo = chosenDeckNo;
     	cards = new Stack<Card>();
     	for(char c: suits) {
-    		for(int i=1; i<=10; i++) {
+    		for(int i=2; i<=10; i++) {
     			cards.add(new Card(i, c));
     		}
     		for(String s: picCardValues) {

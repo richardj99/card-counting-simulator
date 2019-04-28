@@ -13,14 +13,20 @@ public class Dealer {
     private int sum;
     private Card[] hand;
     private boolean stickFlag;
+    private int noOfCards;
     
     public Dealer(){
         sum = 0;
+        hand = new Card[5];
     }
     
     //todo: setter methods, logic for hit and stick, hand
     
     // getters
+    public Card[] getHand(){
+        return hand;
+    }
+    
     public int getSum(){
         return sum;
     }
@@ -49,19 +55,36 @@ public class Dealer {
     
     // methods
     
-    public void dealerTurn(){
-        if(sum > 14){
-            stick();
-        }else{
-            hit();
-        }
+    public int pushCard(Card newCard) {
+    	if(noOfCards<5) {
+    		sum = sum + newCard.getValue();
+    		System.out.println("New Sum " + sum);
+    		for(int i=0; i<=5; i++) {
+    			if(hand[i] == null) {
+    				System.out.println("Adding card to index " + i);
+    				hand[i] = newCard;
+    				noOfCards++;
+    				break;
+    			}
+    		}
+    		return 1;
+    	} else return 0;
     }
     
-    public void hit(){
-        setStick(false);
+    public boolean hitStickDecide() {
+    	boolean stick; // returns true if player wants to stick
+    	if(sum > 14) {
+    		stick = true;
+    	}
+    	else {
+    		stick = false;
+    	}
+    	return stick;
     }
     
-    public void stick(){
-        setStick(true);
+    public void emptyHand() {
+    	hand = new Card[5];
+    	noOfCards = 0;
+    	sum = 0;
     }
 }
